@@ -173,7 +173,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         Write-Host -ForegroundColor $AssessmentColor "Auto-forwarding to remote domains will not be disabled"
         }
   
-  <# This section is optional 
+  
     ## EXPORT LIST OF FORWARDERS TO CSV
     Write-Host    
     $Answer2 = Read-Host "Do you want to export to CSV a list of mailboxes that might be impacted by disabling auto-forward to remote domains? Type Y or N and press Enter to continue"
@@ -190,7 +190,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         Write-Host 
         Write-Host  -ForegroundColor $MessageColor "Run the script again if you wish to export auto-forwarding mailboxes and inbox rules"
         } 
-  #>
+
 
 } else {
     Write-Host 
