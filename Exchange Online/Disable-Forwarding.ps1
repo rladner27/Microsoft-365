@@ -59,22 +59,22 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
 
 ## DENY AUTO-FORWARDING FROM MAILBOX RULES VIA TRANSPORT RULE
 ## Creates a transport rule which will deny auto forwarding rules to external domains and reject the message with a notification to end-users
-## $TransportRuleName = "External Forward Block"
-## $rejectMessageText = "Mail forwarding to external domains is not permitted. If you have questions, please contact support."
-## $ExternalForwardRule = Get-TransportRule | Where-Object {$_.Identity -contains $TransportRuleName}
-## if (!$ExternalForwardRule) {
-##    Write-Output "External Forward Block rule not found, creating rule..."
-##    New-TransportRule -name $TransportRuleName -Priority 1 -SentToScope NotInOrganization -FromScope InOrganization -MessageTypeMatches AutoForward -RejectMessageEnhancedStatusCode 5.7.1 -RejectMessageReasonText $rejectMessageText
-## } else {Write-Output "External forward block rule already exists."}   
+$TransportRuleName = "External Forward Block"
+$rejectMessageText = "Mail forwarding to external domains is not permitted. If you have questions, please contact support."
+$ExternalForwardRule = Get-TransportRule | Where-Object {$_.Identity -contains $TransportRuleName}
+if (!$ExternalForwardRule) {
+   Write-Output "External Forward Block rule not found, creating rule..."
+   New-TransportRule -name $TransportRuleName -Priority 1 -SentToScope NotInOrganization -FromScope InOrganization -MessageTypeMatches AutoForward -RejectMessageEnhancedStatusCode 5.7.1 -RejectMessageReasonText $rejectMessageText
+} else {Write-Output "External forward block rule already exists."}   
 
 ## Remove the ability for users to setup forwarding via the OWA portal
 ## Creates a new RBAC Role Assignment Policy 
-## $RoleName = "DenyForwarding"
-## $DenyForwardRole = Get-ManagementRole | Where-Object {$_.Name -contains $RoleName}
-## if (!$DenyForwardRole) {
-##    Write-Output "DenyForwarding role not found, creating role..."
-##    New-ManagementRole -Parent MyBaseOptions -Name $RoleName
-##    Set-ManagementRoleEntry DenyForwarding\Set-Mailbox -RemoveParameter -Parameters DeliverToMailboxAndForward,ForwardingAddress,ForwardingSmtpAddress
-##    New-RoleAssignmentPolicy -Name DenyForwardingRoleAssignmentPolicy -Roles DenyForwarding,MyContactInformation,MyRetentionPolicies,MyMailSubscriptions,MyTextMessaging,MyVoiceMail,MyDistributionGroupMembership,MyDistributionGroups,MyProfileInformation,MyTeamMailboxes,"My ReadWriteMailbox Apps","My Marketplace Apps","My Custom Apps"
-##    Set-RoleAssignmentPolicy -Identity DenyForwardingRoleAssignmentPolicy -IsDefault -Confirm:$false 
-## } else {Write-Output "DenyForwarding role already exists."}
+$RoleName = "DenyForwarding"
+$DenyForwardRole = Get-ManagementRole | Where-Object {$_.Name -contains $RoleName}
+if (!$DenyForwardRole) {
+   Write-Output "DenyForwarding role not found, creating role..."
+   New-ManagementRole -Parent MyBaseOptions -Name $RoleName
+   Set-ManagementRoleEntry DenyForwarding\Set-Mailbox -RemoveParameter -Parameters DeliverToMailboxAndForward,ForwardingAddress,ForwardingSmtpAddress
+   New-RoleAssignmentPolicy -Name DenyForwardingRoleAssignmentPolicy -Roles DenyForwarding,MyContactInformation,MyRetentionPolicies,MyMailSubscriptions,MyTextMessaging,MyVoiceMail,MyDistributionGroupMembership,MyDistributionGroups,MyProfileInformation,MyTeamMailboxes,"My ReadWriteMailbox Apps","My Marketplace Apps","My Custom Apps"
+   Set-RoleAssignmentPolicy -Identity DenyForwardingRoleAssignmentPolicy -IsDefault -Confirm:$false 
+} else {Write-Output "DenyForwarding role already exists."}
