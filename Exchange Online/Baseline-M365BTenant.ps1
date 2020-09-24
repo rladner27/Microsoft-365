@@ -157,7 +157,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         ## DENY AUTOFORWARD ON THE DEFAULT REMOTE DOMAIN (*) 
         Set-RemoteDomain Default -AutoForwardEnabled $false
 
-   <# This section is optional     
+   <# This section is optional // enabling -SM #> 
         ## ALSO DENY AUTO-FORWARDING FROM MAILBOX RULES VIA TRANSPORT RULE WITH REJECTION MESSAGE
         $TransportRuleName = "External Forward Block"
         $rejectMessageText = "Mail forwarding to external domains is not permitted. If you have questions, please contact support."
@@ -166,7 +166,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         Write-Output "External Forward Block rule not found, creating rule..."
         New-TransportRule -name $TransportRuleName -Priority 1 -SentToScope NotInOrganization -MessageTypeMatches AutoForward -RejectMessageEnhancedStatusCode 5.7.1 -RejectMessageReasonText $rejectMessageText
         } else {Write-Output "External forward block rule already exists."} 
-    #>
+  <# enabling -SM #>
         Write-Host 
         Write-Host -ForegroundColor $MessageColor "Auto-forwarding to remote domains is now disabled"        
         } else {
@@ -174,7 +174,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         Write-Host -ForegroundColor $AssessmentColor "Auto-forwarding to remote domains will not be disabled"
         }
   
-  <# This section is optional 
+  <# This section is optional // enabling -SM #>
     ## EXPORT LIST OF FORWARDERS TO CSV
     Write-Host    
     $Answer2 = Read-Host "Do you want to export to CSV a list of mailboxes that might be impacted by disabling auto-forward to remote domains? Type Y or N and press Enter to continue"
@@ -191,7 +191,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         Write-Host 
         Write-Host  -ForegroundColor $MessageColor "Run the script again if you wish to export auto-forwarding mailboxes and inbox rules"
         } 
-  #>
+  <# enabling -SM #>
 
 } else {
     Write-Host 
