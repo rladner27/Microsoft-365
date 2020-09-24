@@ -156,7 +156,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         ## DENY AUTOFORWARD ON THE DEFAULT REMOTE DOMAIN (*) 
         Set-RemoteDomain Default -AutoForwardEnabled $false
 
-   <# This section is optional     
+   <# This section is optional   enabling "optional section"  #>
         ## ALSO DENY AUTO-FORWARDING FROM MAILBOX RULES VIA TRANSPORT RULE WITH REJECTION MESSAGE
         $TransportRuleName = "External Forward Block"
         $rejectMessageText = "Mail forwarding to external domains is not permitted. If you have questions, please contact support."
@@ -165,7 +165,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         Write-Output "External Forward Block rule not found, creating rule..."
         New-TransportRule -name $TransportRuleName -Priority 1 -SentToScope NotInOrganization -MessageTypeMatches AutoForward -RejectMessageEnhancedStatusCode 5.7.1 -RejectMessageReasonText $rejectMessageText
         } else {Write-Output "External forward block rule already exists."} 
-    #>
+    <# enabling "optional section" #>
         Write-Host 
         Write-Host -ForegroundColor $MessageColor "Auto-forwarding to remote domains is now disabled"        
         } else {
