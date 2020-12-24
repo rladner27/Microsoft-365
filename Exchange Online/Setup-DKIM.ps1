@@ -9,13 +9,12 @@
 ## https://docs.microsoft.com/en-us/powershell/exchange/exchange-online/connect-to-exchange-online-powershell/mfa-connect-to-exchange-online-powershell?view=exchange-ps
 ## WARNING: Script provided as-is. Author is not responsible for its use and application. Use at your own risk.
 
-
-$MessageColor = "cyan"
-$AssessmentColor = "magenta"
-
 Param(
 $DomainName
 )
+
+$MessageColor = "cyan"
+$AssessmentColor = "magenta"
 
 if($DomainName -eq $null -or $DomainName -eq ""){
     Write-Host 
