@@ -14,32 +14,33 @@ $DomainName
 )
 
 $MessageColor = "cyan"
-$AssessmentColor = "magenta"
 
-if($DomainName -eq $null -or $DomainName -eq ""){
-    Write-Host 
+if ($null -eq $DomainName -or $DomainName -eq "") {
     $DomainName = Read-Host -Prompt "Please specify the domain name"
     Write-Host
 }
 
-
 ## This line will return the CNAME record values for the specified domain name (Points to):
-Write-Host -ForegroundColor $MessageColor "Enter the (Points to) CNAME values in DNS for selector1._domainkey and selector2._domainkey:"
-Write-Host 
+Write-Host -ForegroundColor $MessageColor "Enter the (Points to) CNAME values in DNS for $($DomainName):"
+Write-Host
 
-Get-DkimSigningConfig $DomainName | fl Domain,*cname 
+$values = Get-DkimSigningConfig $DomainName | Select-Object Domain, *cname
+$table = @{
+    'selector1._domainkey' = $values.Selector1CNAME
+    'selector2._domainkey' = $values.Selector2CNAME
+}
+$table | ForEach-Object {$_} | Format-Table @{n='Points to'; e={$_.Key}}, @{n='Value'; e={$_.Value}}
 
 ## Pause the script to allow time for entering DKIM records
-Write-Host  
-Read-Host -Prompt "Enter the DKIM records, have a coffee and wait for several minutes while DNS propogates, and then press Enter to continue..."
-Write-Host 
+Read-Host -Prompt "Enter the DKIM records, have a coffee and wait several minutes while DNS propogates, and then press Enter to continue..."
 ## This line will attempt to activate the DKIM service (CNAME records must be already be populated in DNS)
 
-##If DKIM exists but not already enabled, enable it
-if (((get-dkimsigningconfig -identity $domainname -ErrorAction silent).enabled) -eq $False) {set-dkimsigningconfig -identity $domainname -enabled $true}
-##If it doesn't exist - create new config
-if (!(get-dkimsigningconfig -identity $domainname -erroraction silent)) {New-DkimSigningConfig -DomainName $DomainName -Enabled $true}
-Write-Host 
-
+## If DKIM exists but not already enabled, enable it
+if (((Get-DkimSigningConfig -Identity $DomainName -ErrorAction SilentlyContinue).enabled) -eq $false) {
+    Set-DkimSigningConfig -Identity $DomainName -Enabled $true
+}
+## If it doesn't exist - create new config
+if (!(Get-DkimSigningConfig -Identity $DomainName -ErrorAction SilentlyContinue)) {
+    New-DkimSigningConfig -DomainName $DomainName -Enabled $true
+}
 ## End of script
-
