@@ -29,7 +29,7 @@ $table = @{
     'selector1._domainkey' = $values.Selector1CNAME
     'selector2._domainkey' = $values.Selector2CNAME
 }
-$table | ForEach-Object {$_} | Format-Table @{n='Points to'; e={$_.Key}}, @{n='Value'; e={$_.Value}}
+$table | ForEach-Object {$_} | Format-Table @{n='Host'; e={$_.Key}}, @{n='Points to'; e={$_.Value}}
 
 ## Pause the script to allow time for entering DKIM records
 Read-Host -Prompt "Enter the DKIM records, have a coffee and wait several minutes while DNS propogates, and then press Enter to continue..."
