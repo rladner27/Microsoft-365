@@ -1,25 +1,10 @@
-﻿##
-## This is slightly modified from Microsoft Graph scripts located at:
-## https://github.com/microsoftgraph/powershell-intune-samples/
-##
-## You must specify two variables:
-## 1. The full path to the JSON file for import under the $ImportPath varaible
-## e.g. C:\Intune\Compliance-iOS.json
-## 2. The admin user account who can authenticate to perform the import
-## e.g. intuneadmin@itpromentor.com
-## 
-
-
-Param (
-    $ImportPath,
-    $User
-)
-
-
+﻿
 <#
+
 .COPYRIGHT
 Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
 See LICENSE in the project root for license information.
+
 #>
 
 ####################################################
@@ -323,9 +308,7 @@ $global:authToken = Get-AuthToken -User $User
 
 ####################################################
 
-if ($ImportPath -eq $null -or $ImportPath -eq "") {
-    $ImportPath = Read-Host -Prompt "Please specify a path to a JSON file to import data from e.g. C:\IntuneOutput\Policies\policy.json"
-}
+$ImportPath = Read-Host -Prompt "Please specify a path to a JSON file to import data from e.g. C:\IntuneOutput\Policies\policy.json"
 
 # Replacing quotes for Test-Path
 $ImportPath = $ImportPath.replace('"','')
@@ -365,3 +348,4 @@ $JSON_Output
 write-host
 Write-Host "Adding Compliance Policy '$DisplayName'" -ForegroundColor Yellow
 Add-DeviceCompliancePolicy -JSON $JSON_Output
+        
