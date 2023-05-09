@@ -230,7 +230,7 @@ if ($RemoteDomainDefault.AutoForwardEnabled) {
         $TransportRuleName = "External Forward Block"
         $RejectMessageText = "Mail forwarding to external domains is not permitted. If you have questions, please contact support."
         $TransportRules = Get-TransportRule
-        $RulePriority = $TransportRules.Count -gt 1 ? 1 : 0
+        if ($TransportRules.Count -gt 1) {$RulePriority = 1} else {$RulePriority = 0}
         $ExternalForwardRule = $TransportRules | Where-Object {$_.Identity -contains $TransportRuleName}
 
         if (!$ExternalForwardRule) {
